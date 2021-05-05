@@ -1,25 +1,41 @@
 import TelegramBot from 'node-telegram-bot-api';
 import moment from 'moment';
 import config from 'config';
-import { ConvercetionDetails } from './interfaces/convercetionDetails'
+import { ConversionDict } from './interfaces/conversionDetails'
 import { getquote } from './services/kanyeQuote';
+import { connect, ObjectId } from 'mongoose';
 
 const botToken: string = config.get('botToken');
+const mongodb: { host: string, port: number } = config.get('mongodb');
+
+
 // Create a bot that uses 'polling' to fetch new updates
 const bot: TelegramBot = new TelegramBot(botToken, {
   polling: true,
   onlyFirstMatch: true,
 });
 
-const convercetionDetails: ConvercetionDetails = {};
+// Connect to mongodb
+(async function () {
+  await connect(`mongodb://${mongodb.host}:${mongodb.port}/chat`);
+});
 
-bot.onText(/\/start (.+)/, (msg, match) => {
+const conversionDetails: ConversionDict = {};
+
+bot.onText(/\/start (.+)/, async (msg, match) => {
   const chatId: number = msg.chat.id;
   const email: string = match[1];
-  convercetionDetails[chatId] = { email, startTime: moment() };
+  conversionDetails[chatId] = { email, startTime: moment() };
   const botResponse: string = 'Hi, how can i help you today?';
+
   //Todo: Add user to db
-  bot.sendMessage(chatId, botResponse);
+
+  try {
+    await bot.sendMessage(chatId, botResponse);
+
+  } catch (error) {
+    console.error('Error while sending message on telegram');
+  }
 });
 
 bot.onText(/\/freetext (.+)/, async (msg, match) => {
@@ -43,7 +59,7 @@ bot.onText(/\/end/, async (msg) => {
   //Todo: Add chat to db
   bot.sendMessage(chatId, botResponse);
   const endTime = moment();
-  delete convercetionDetails[chatId];
+  delete conversionDetails[chatId];
 });
 
 bot.onText(/(.+)/, (msg) => {
