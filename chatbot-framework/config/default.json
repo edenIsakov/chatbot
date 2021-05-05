@@ -1,5 +1,9 @@
 {
   "port": 8080,
   "botToken": "1743782753:AAGyZBFh4-KBnrRVERh6mdkRudkNLkON_mo",
-  "kanyeUrl": "https://api.kanye.rest/"
+  "kanyeUrl": "https://api.kanye.rest/",
+  "mongodb": {
+    "host": "localhost",
+    "port": 27017
+  }
 }
