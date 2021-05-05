@@ -4,7 +4,7 @@ import { Message, messageSchema } from './message';
 interface Conversation {
   id: number,
   messages?: Message[],
-  timeDutation?: Number,
+  timeDutation?: number,
 }
 
 const conversationSchema = new Schema({

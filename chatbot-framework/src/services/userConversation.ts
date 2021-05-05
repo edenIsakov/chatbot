@@ -39,11 +39,28 @@ const addTimeDutationToConversation = async (email: string, conversationId: numb
   return await user.save();
 }
 
+const countMessagesAndAvgTime = async (email) => {
+  const user = await User.findOne({ email });
+  let count = 0;
+  let sumTime = 0;
+  let endedConvs = 0;
+  for (let conv of user.conversations) {
+    count += conv.messages ? conv.messages.length : 0;
+    if (conv.timeDutation) {
+      sumTime += conv.timeDutation;
+      endedConvs += 1;
+    }
+  }
+  return { count, avg: (sumTime / endedConvs) };
+}
+
+
 
 export {
   addOrFindUser,
   addNewConversation,
   addMessagesToUserConversation,
   addTimeDutationToConversation,
+  countMessagesAndAvgTime,
 }
 

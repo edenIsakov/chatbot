@@ -1,37 +1,32 @@
-import { Conversation } from '../Schemas/conversation';
 import { Message } from '../Schemas/message';
-import { addOrFindUser, addNewConversation, addMessagesToUserConversation, addTimeDutationToConversation } from '../services/userConversation';
+import {
+  addOrFindUser,
+  addNewConversation, addMessagesToUserConversation, addTimeDutationToConversation, countMessagesAndAvgTime
+} from '../services/userConversation';
 
 
 const startConversation = async (email: string, chatId: number, messages: Message[]) => {
-  try {
-    await addOrFindUser(email);
-    await addNewConversation(email, chatId);
-    await addMessagesToUserConversation(email, chatId, messages);
-  } catch (error) {
-    console.log('Faild to add conversation', error);
-  }
+  await addOrFindUser(email);
+  await addNewConversation(email, chatId);
+  await addMessagesToUserConversation(email, chatId, messages);
 }
 
 const addMessagesToConversation = async (email: string, chatId: number, messages: Message[]) => {
-  try {
-    await addMessagesToUserConversation(email, chatId, messages);
-  } catch (error) {
-    console.log('Faild to add message', error);
-  }
+  await addMessagesToUserConversation(email, chatId, messages);
 }
 
 const endConverstion = async (email: string, chatId: number, messages: Message[], timeDutation: number) => {
-  try {
-    await addMessagesToUserConversation(email, chatId, messages);
-    await addTimeDutationToConversation(email, chatId, timeDutation);
-  } catch (error) {
-    console.log('Faild to end conversation', error);
-  }
+  await addMessagesToUserConversation(email, chatId, messages);
+  await addTimeDutationToConversation(email, chatId, timeDutation);
+}
+
+const getstatics = async (email) => {
+  return await countMessagesAndAvgTime(email);
 }
 
 export {
   startConversation,
   addMessagesToConversation,
-  endConverstion
+  endConverstion,
+  getstatics,
 }

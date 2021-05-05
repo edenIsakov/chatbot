@@ -2,7 +2,7 @@ import moment from 'moment';
 import { ConversationDict } from '../interfaces/conversationDetails'
 import { getquote } from '../services/kanyeQuote';
 import { Message, Sender } from '../Schemas/message';
-import { startConversation, addMessagesToConversation, endConverstion } from './conversation';
+import { startConversation, addMessagesToConversation, endConverstion, getstatics } from './conversation';
 
 export const handleBotChat = (bot) => {
   const conversationDetails: ConversationDict = {};
@@ -18,7 +18,11 @@ export const handleBotChat = (bot) => {
       console.error('Error while sending message on telegram');
     }
     const messages: Message[] = [{ text: msg.text, sender: Sender.User }, { text: botResponse, sender: Sender.Bot }];
-    startConversation(email, chatId, messages);
+    try {
+      await startConversation(email, chatId, messages);
+    } catch (error) {
+      console.error('Error while saving converstion', error);
+    }
   });
 
   bot.onText(/\/freetext (.+)/, async (msg, match) => {
@@ -32,21 +36,34 @@ export const handleBotChat = (bot) => {
     }
     const messages: Message[] = [{ text: msg.text, sender: Sender.User }, { text: botResponse, sender: Sender.Bot }];
     const { email } = conversationDetails[chatId];
-    addMessagesToConversation(email, chatId, messages);
+    try {
+      await addMessagesToConversation(email, chatId, messages);
+    } catch (error) {
+      console.error('Error while adding message to converstion', error);
+    }
   });
 
   bot.onText(/\/getinfo/, async (msg) => {
     const chatId: number = msg.chat.id;
-    // Todo: get statics
-    const botResponse: string = `Number of messages 5\nAvg converction time 3.4 sec `;
+    const { email } = conversationDetails[chatId];
+    let botResponse: string;
+    try {
+      const { count, avg } = await getstatics(email);
+      botResponse = `Number of messages ${count}\nAvg converction time ${avg} sec `;
+    } catch (error) {
+      botResponse = `Failed to get statics`;
+    }
     try {
       await bot.sendMessage(chatId, botResponse);
     } catch (error) {
       console.error('Error while sending message on telegram');
     }
     const messages: Message[] = [{ text: msg.text, sender: Sender.User }, { text: botResponse, sender: Sender.Bot }];
-    const { email } = conversationDetails[chatId];
-    addMessagesToConversation(email, chatId, messages);
+    try {
+      await addMessagesToConversation(email, chatId, messages);
+    } catch (error) {
+      console.error('Error while adding message to converstion', error);
+    }
   });
 
   bot.onText(/\/end/, async (msg) => {
@@ -59,8 +76,12 @@ export const handleBotChat = (bot) => {
     }
     const messages: Message[] = [{ text: msg.text, sender: Sender.User }, { text: botResponse, sender: Sender.Bot }];
     const { email, startTime } = conversationDetails[chatId];
-    const duration = moment().diff(startTime);
-    endConverstion(email, chatId, messages, duration);
+    const duration = moment().diff(startTime, 'seconds');
+    try {
+      await endConverstion(email, chatId, messages, duration);
+    } catch (error) {
+      console.error('Error while ending converstion', error);
+    }
     delete conversationDetails[chatId];
   });
 
@@ -74,6 +95,10 @@ export const handleBotChat = (bot) => {
     }
     const messages: Message[] = [{ text: msg.text, sender: Sender.User }, { text: botResponse, sender: Sender.Bot }];
     const { email } = conversationDetails[chatId];
-    addMessagesToConversation(email, chatId, messages);
+    try {
+      await addMessagesToConversation(email, chatId, messages);
+    } catch (error) {
+      console.error('Error while adding message to converstion', error);
+    }
   });
 }
