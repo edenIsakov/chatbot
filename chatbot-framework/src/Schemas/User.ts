@@ -1,17 +1,17 @@
 import { model, Schema, Model, Document } from 'mongoose';
-import { conversectionSchema, Conversion } from './conversion';
+import { conversationSchema, Conversation } from './conversation';
 
 interface IUser extends Document {
   email: string,
-  conversections: [Conversion],
+  conversations: [Conversation],
 }
 
 const UserSchema: Schema = new Schema({
   email: { type: String, required: true },
-  conversections: [conversectionSchema]
+  conversations: [conversationSchema]
 });
 
-const User: Model<IUser> = model('User', UserSchema);
+const User: Model<IUser> = model('UserConversations', UserSchema);
 
 export {
   IUser,

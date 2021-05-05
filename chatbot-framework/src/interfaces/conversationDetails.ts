@@ -5,11 +5,11 @@ interface Details {
   startTime: Moment,
 }
 
-interface ConversionDict {
+interface ConversationDict {
   [key: string]: Details,
 
 }
 
 export {
-  ConversionDict,
+  ConversationDict,
 }

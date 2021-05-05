@@ -12,7 +12,7 @@ interface Message {
 
 const messageSchema = new Schema({
   text: { type: String, required: true },
-  Sender: {
+  sender: {
     type: String,
     enum: ['user', 'bot'],
     required: true,
@@ -20,4 +20,4 @@ const messageSchema = new Schema({
 });
 
 
-export { Message, messageSchema }
+export { Message, messageSchema, Sender }
