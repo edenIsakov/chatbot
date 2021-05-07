@@ -38,7 +38,6 @@ function ChatWrapper() {
   }, []);
 
 
-
   return (
     <div className={classes.root}>
       <Grid

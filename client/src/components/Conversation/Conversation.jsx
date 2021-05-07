@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-
+import { io } from 'socket.io-client';
 import { makeStyles } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
 import PersonIcon from '@material-ui/icons/Person';
@@ -7,6 +7,14 @@ import Typography from '@material-ui/core/Typography';
 import Message from '../Message';
 import axios from 'axios';
 import config from '../../config';
+
+function usePrevious(value) {
+  const ref = useRef();
+  useEffect(() => {
+    ref.current = value;
+  });
+  return ref.current;
+}
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -16,7 +24,6 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
   },
   top: {
-    // backgroundColor: '#ededed',
     backgroundColor: '#f6f6f6',
     borderBottom: '1px solid #f2f2f2',
     height: '50px',
@@ -39,27 +46,56 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Conversation({ currentUser }) {
-
   const classes = useStyles();
   const [messages, setMessages] = useState([]);
+  const [socket, setSocket] = useState({});
   const refEndMessage = useRef(null);
+  const prevUser = usePrevious(currentUser);
+
+  useEffect(() => {
+    const currentSocket = io(config.serverhost, { transport: ['websocket'] });
+    setSocket(currentSocket);
+    return () => currentSocket.disconnect();
+  }, []);
 
   const scrollToBottom = useCallback(() => {
-    refEndMessage.current.scrollIntoView({ behavior: 'smooth' });
-  }, [])
+    refEndMessage.current.scrollIntoView();
+  }, []);
 
   useEffect(() => {
     async function getMessages() {
       const result = await axios.get(`${config.serverhost}/users/${currentUser}`);
       const allMessages = result.data;
-
       setMessages(allMessages);
-      scrollToBottom();
     }
     if (currentUser) {
       getMessages();
     }
-  }, [currentUser, scrollToBottom]);
+  }, [currentUser]);
+
+  useEffect(() => {
+    function listenToMessages() {
+      socket.on(currentUser, (...args) => {
+        const currentMessages = args[0];
+        setMessages((prevMessages) => [...prevMessages, ...currentMessages]);
+      });
+    }
+    if (currentUser && socket) {
+      listenToMessages();
+    }
+  }, [currentUser, socket]);
+
+  useEffect(() => {
+    if (messages) {
+      scrollToBottom();
+    }
+  }, [messages, scrollToBottom])
+
+  useEffect(() => {
+    if (prevUser && prevUser !== currentUser) {
+      socket.off(prevUser);
+    }
+  }, [currentUser, prevUser, socket])
 
   return (
     <div className={classes.root}>
