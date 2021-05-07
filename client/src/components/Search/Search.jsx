@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import InputBase from '@material-ui/core/InputBase';
 import SearchIcon from '@material-ui/icons/Search';
@@ -43,8 +43,20 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Search() {
+function Search({ onSearch }) {
+  const [searchValue, setSearchValue] = useState();
   const classes = useStyles();
+
+  const valueChanged = useCallback((event) => {
+    setSearchValue(event.target.value);
+  }, []);
+
+  useEffect(() => {
+    function searchValueChanged() {
+      onSearch(searchValue);
+    }
+    searchValueChanged();
+  }, [onSearch, searchValue]);
 
   return (
     <div className={classes.root}>
@@ -53,12 +65,14 @@ function Search() {
           <SearchIcon />
         </div>
         <InputBase
+          onChange={valueChanged}
           placeholder="Search…"
           classes={{
             root: classes.inputRoot,
             input: classes.inputInput,
           }}
           inputProps={{ 'aria-label': 'search' }}
+          value={searchValue}
         />
       </div>
     </div>

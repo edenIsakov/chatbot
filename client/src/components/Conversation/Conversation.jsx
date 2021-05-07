@@ -1,9 +1,12 @@
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+
 import { makeStyles } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
 import PersonIcon from '@material-ui/icons/Person';
 import Typography from '@material-ui/core/Typography';
 import Message from '../Message';
-import Paper from '@material-ui/core/Paper';
+import axios from 'axios';
+import config from '../../config';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -35,12 +38,29 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const user = `Edena1995@gmailcom`;
-const message = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.';
-
-function Conversation() {
+function Conversation({ currentUser }) {
 
   const classes = useStyles();
+  const [messages, setMessages] = useState([]);
+  const refEndMessage = useRef(null);
+
+  const scrollToBottom = useCallback(() => {
+    refEndMessage.current.scrollIntoView({ behavior: 'smooth' });
+  }, [])
+
+  useEffect(() => {
+    async function getMessages() {
+      const result = await axios.get(`${config.serverhost}/users/${currentUser}`);
+      const allMessages = result.data;
+
+      setMessages(allMessages);
+      scrollToBottom();
+    }
+    if (currentUser) {
+      getMessages();
+    }
+  }, [currentUser, scrollToBottom]);
+
   return (
     <div className={classes.root}>
       <div className={classes.top}>
@@ -52,21 +72,19 @@ function Conversation() {
             className={classes.text}
             noWrap
           >
-            {user}
+            {currentUser}
           </Typography>
         </div>
       </div>
       <div className={classes.messagesWrapper}>
-        <Message isUserMessage={true} message={message} />
-        <Message isUserMessage={false} message={'asdasdc sad sd asd ads asd '} />
-        <Message isUserMessage={true} message={'dasd asdas dasda sasdsadas asd  asdasd asdasd asdasd asdasdaeasdasdae asdasdaew as'} />
-        <Message isUserMessage={true} message={'dasd asdas dasda sasdsadas asd  asdasd asdasd asdasd asdasdaeasdasdae asdasdaew as'} />
-        <Message isUserMessage={true} message={'dasd asdas dasda sasdsadas asd  asdasd asdasd asdasd asdasdaeasdasdae asdasdaew as'} />
-        <Message isUserMessage={true} message={'dasd asdas dasda sasdsadas asd  asdasd asdasd asdasd asdasdaeasdasdae asdasdaew as'} />
-        <Message isUserMessage={true} message={'dasd asdas dasda sasdsadas asd  asdasd asdasd asdasd asdasdaeasdasdae asdasdaew as'} />
-        <Message isUserMessage={true} message={'dasd asdas dasda sasdsadas asd  asdasd asdasd asdasd asdasdaeasdasdae asdasdaew as'} />
-        <Message isUserMessage={true} message={'dasd asdas dasda sasdsadas asd  asdasd asdasd asdasd asdasdaeasdasdae asdasdaew as'} />
-        <Message isUserMessage={true} message={'dasd asdas dasda sasdsadas asd  asdasd asdasd asdasd asdasdaeasdasdae asdasdaew as'} />
+        {
+          messages.map((message) => (
+            <Message key={message._id} isUserMessage={message.sender === 'user'} message={message.text} />
+          ))
+        }
+        <div style={{ float: "left", clear: "both" }}
+          ref={refEndMessage}>
+        </div>
       </div>
     </div>
   );

@@ -10,11 +10,16 @@ const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
     overflow: 'hidden',
+
   },
   paper: {
-    borderTop: '1px solid #f2f2f2',
+    borderBottom: '1px solid #f2f2f2',
     borderRadius: '0',
     height: '72px',
+    '&:hover': {
+      cursor: 'pointer',
+      backgroundColor: '#f5f5f5',
+    }
   },
   details: {
     height: '100%',
@@ -23,18 +28,16 @@ const useStyles = makeStyles((theme) => ({
   },
   text: {
     maxWidth: '80%',
+    textAlign: 'left',
   }
 }));
 
-const message = `Truncation should be conditionally applicable on this long line of text
- as this is a much longer line than what the container can support. `;
-
-function UserCard() {
+function UserCard({ email, userChoosen }) {
   const classes = useStyles();
 
   return (
     <div className={classes.root}>
-      <Paper className={classes.paper} elevation={0}>
+      <Paper className={classes.paper} elevation={0} onClick={() => userChoosen(email)}>
         <Grid
           className={classes.details}
           direction="row"
@@ -49,8 +52,10 @@ function UserCard() {
           </Grid>
           <Grid
             className={classes.text}
-            item xs zeroMinWidth>
-            <Typography noWrap>{message}</Typography>
+            item
+            xs
+            zeroMinWidth>
+            <Typography noWrap>{email}</Typography>
           </Grid>
         </Grid>
       </Paper>
