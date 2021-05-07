@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import UserList from '../UserList';
 import Conversation from '../Conversation';
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -30,9 +31,15 @@ const useStyles = makeStyles((theme) => ({
 
 function ChatWrapper() {
   const classes = useStyles();
+  const [currentUser, setCurrentUser] = useState();
+
+  const userChoosen = useCallback((email) => {
+    setCurrentUser(email);
+  }, []);
+
+
 
   return (
-
     <div className={classes.root}>
       <Grid
         className={classes.wrapper}
@@ -46,14 +53,14 @@ function ChatWrapper() {
           item
           xs={3}
         >
-          <UserList />
+          <UserList userChoosen={userChoosen} />
         </Grid>
         <Grid
           className={classes.conversationWrapper}
           item
           xs={9}
         >
-          <Conversation />
+          <Conversation currentUser={currentUser} />
         </Grid>
       </Grid>
     </div>

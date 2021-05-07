@@ -3,8 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import UserCard from '../UserCard';
 import Search from '../Search';
 import axios from 'axios';
-
-const host = 'http://localhost:8080'
+import config from '../../config'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -27,7 +26,7 @@ function UserList({ userChoosen }) {
 
   useEffect(() => {
     async function getUsers() {
-      const result = await axios.get(`${host}/users`);
+      const result = await axios.get(`${config.serverhost}/users`);
       setUsers(result.data);
       setAllUsers(result.data);
     }
@@ -58,7 +57,7 @@ function UserList({ userChoosen }) {
       <div className={classes.listWrapper}>
         {
           users.map(user =>
-            <UserCard key={user._id} email={user.email} onClick={() => { userChoosen(user.email) }} />
+            <UserCard key={user._id} email={user.email} userChoosen={userChoosen} />
           )
         }
       </div>

@@ -4,11 +4,11 @@ const getUsersEmail = async (): Promise<IUser[]> => {
   return await User.find({}).select('email').exec();
 }
 
-const getConversationsByEmail = async (email: string): Promise<IUser[]> => {
+const getMessagesByEmail = async (email: string): Promise<IUser[]> => {
   return await User.find({ email }).select('conversations -_id').exec();
 }
 
 export {
   getUsersEmail,
-  getConversationsByEmail
+  getMessagesByEmail
 }

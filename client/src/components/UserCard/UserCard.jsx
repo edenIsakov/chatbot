@@ -32,12 +32,12 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function UserCard({ email }) {
+function UserCard({ email, userChoosen }) {
   const classes = useStyles();
 
   return (
     <div className={classes.root}>
-      <Paper className={classes.paper} elevation={0}>
+      <Paper className={classes.paper} elevation={0} onClick={() => userChoosen(email)}>
         <Grid
           className={classes.details}
           direction="row"
