@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
       : 'right',
     backgroundColor: props => props.isUserMessage
       ? 'white'
-      : '#dcf8c6',
+      : 'rgb(21 154 164)',
   }
 }));
 function Message({ isUserMessage, message }) {

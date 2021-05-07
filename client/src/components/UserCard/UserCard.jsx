@@ -12,7 +12,6 @@ const useStyles = makeStyles((theme) => ({
     overflow: 'hidden',
   },
   paper: {
-    padding: `${theme.spacing(2)} 0`,
     borderTop: '1px solid #f2f2f2',
     borderRadius: '0',
     height: '72px',
@@ -45,7 +44,7 @@ function UserCard() {
           spacing={2}>
           <Grid item>
             <Avatar>
-              <PersonIcon/>
+              <PersonIcon />
             </Avatar>
           </Grid>
           <Grid

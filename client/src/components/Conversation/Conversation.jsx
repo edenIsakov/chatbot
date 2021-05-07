@@ -30,6 +30,8 @@ const useStyles = makeStyles((theme) => ({
   },
   messagesWrapper: {
     height: '100%',
+    overflowY: 'auto',
+    padding: '10px',
   }
 }));
 
@@ -57,6 +59,13 @@ function Conversation() {
       <div className={classes.messagesWrapper}>
         <Message isUserMessage={true} message={message} />
         <Message isUserMessage={false} message={'asdasdc sad sd asd ads asd '} />
+        <Message isUserMessage={true} message={'dasd asdas dasda sasdsadas asd  asdasd asdasd asdasd asdasdaeasdasdae asdasdaew as'} />
+        <Message isUserMessage={true} message={'dasd asdas dasda sasdsadas asd  asdasd asdasd asdasd asdasdaeasdasdae asdasdaew as'} />
+        <Message isUserMessage={true} message={'dasd asdas dasda sasdsadas asd  asdasd asdasd asdasd asdasdaeasdasdae asdasdaew as'} />
+        <Message isUserMessage={true} message={'dasd asdas dasda sasdsadas asd  asdasd asdasd asdasd asdasdaeasdasdae asdasdaew as'} />
+        <Message isUserMessage={true} message={'dasd asdas dasda sasdsadas asd  asdasd asdasd asdasd asdasdaeasdasdae asdasdaew as'} />
+        <Message isUserMessage={true} message={'dasd asdas dasda sasdsadas asd  asdasd asdasd asdasd asdasdaeasdasdae asdasdaew as'} />
+        <Message isUserMessage={true} message={'dasd asdas dasda sasdsadas asd  asdasd asdasd asdasd asdasdaeasdasdae asdasdaew as'} />
         <Message isUserMessage={true} message={'dasd asdas dasda sasdsadas asd  asdasd asdasd asdasd asdasdaeasdasdae asdasdaew as'} />
       </div>
     </div>

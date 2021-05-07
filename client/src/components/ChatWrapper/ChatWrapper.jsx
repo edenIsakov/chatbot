@@ -17,8 +17,14 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.text.secondary,
   },
   wrapper: {
-    height: 'calc(100vh - 40px)',
+    height: 'calc(100vh - 100px)',
     minHeight: '600px',
+  },
+  userListWrapper: {
+    height: '100%',
+  },
+  conversationWrapper: {
+    height: '100%',
   }
 }));
 
@@ -35,10 +41,18 @@ function ChatWrapper() {
         justify="center"
         alignItems="strech"
         spacing={0}>
-        <Grid item xs={3}>
+        <Grid
+          className={classes.userListWrapper}
+          item
+          xs={3}
+        >
           <UserList />
         </Grid>
-        <Grid item xs={9}>
+        <Grid
+          className={classes.conversationWrapper}
+          item
+          xs={9}
+        >
           <Conversation />
         </Grid>
       </Grid>

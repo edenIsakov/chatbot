@@ -6,11 +6,13 @@ import Search from '../Search';
 const useStyles = makeStyles((theme) => ({
   root: {
     height: '100%',
+    display: 'flex',
+    flexDirection: 'column'
     // borderRight: '1px solid',
   },
   listWrapper: {
-    overflow: 'auto',
-    height: '100%',
+    overflowY: 'auto',
+    height: '100%'
   }
 }));
 
@@ -34,8 +36,8 @@ function UserList() {
         <UserCard />
         <UserCard />
         <UserCard />
-        {/* <UserCard />
-        <UserCard /> */}
+        <UserCard />
+        <UserCard />
       </div>
 
     </div>
