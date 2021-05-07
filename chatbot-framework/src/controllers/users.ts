@@ -15,7 +15,8 @@ const getUserConversations = async (req, res, next) => {
   try {
     const { email } = req.params;
     const result: IUser[] = await getConversationsByEmail(email);
-    res.status(200).send(result);
+    let conversations = result[0].conversations;
+    res.status(200).send(conversations);
   } catch (error) {
     res.status(500).send('Error trying get user conversations');
   }
