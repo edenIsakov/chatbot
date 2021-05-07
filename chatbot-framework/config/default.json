@@ -5,5 +5,6 @@
   "mongodb": {
     "host": "localhost",
     "port": 27017
-  }
+  },
+  "crosOrigin": "http://localhost:3000"
 }
