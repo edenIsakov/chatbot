@@ -1,3 +1,4 @@
+import React, { memo } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
@@ -25,9 +26,8 @@ const useStyles = makeStyles((theme) => ({
       : 'rgb(21 154 164)',
   }
 }));
-function Message({ isUserMessage, message }) {
+const Message = memo(({ isUserMessage, message }) => {
   const classes = useStyles({ isUserMessage });
-
   return (
     <div className={classes.root}>
       <Paper
@@ -43,6 +43,6 @@ function Message({ isUserMessage, message }) {
 
     </div >
   );
-}
+});
 
 export default Message;
