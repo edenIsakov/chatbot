@@ -8,6 +8,10 @@ const useStyles = makeStyles((theme) => ({
     height: '100%',
     // borderRight: '1px solid',
   },
+  listWrapper: {
+    overflow: 'auto',
+    height: '100%',
+  }
 }));
 
 function UserList() {
@@ -16,10 +20,24 @@ function UserList() {
   return (
     <div className={classes.root}>
       <Search />
-      <UserCard />
-      <UserCard />
-      <UserCard />
-      <UserCard />
+      <div className={classes.listWrapper}>
+        <UserCard />
+        <UserCard />
+        <UserCard />
+        <UserCard />
+        <UserCard />
+        <UserCard />
+        <UserCard />
+        <UserCard />
+        <UserCard />
+        <UserCard />
+        <UserCard />
+        <UserCard />
+        <UserCard />
+        {/* <UserCard />
+        <UserCard /> */}
+      </div>
+
     </div>
   );
 }
