@@ -4,6 +4,7 @@ import { addMessagesToConversation, endConverstion, getstatics, startConversatio
 import { ConversationDict } from '../interfaces/conversationDetails'
 import { Message, Sender } from '../Schemas/message';
 import { getquote } from './kanyeQuote';
+import GUID from 'guid';
 
 
 const conversationDetails: ConversationDict = {};
@@ -14,7 +15,7 @@ const start = async (chatId: number, email: string, text: string, bot, io) => {
   const messages: Message[] = [{ text, sender: Sender.User }, { text: botResponse, sender: Sender.Bot }];
   try {
     await bot.sendMessage(chatId, botResponse);
-    io.emit(email, messages);
+    io.emit(email, [{ ...messages[0], _id: GUID.create() }, { ...messages[1], _id: GUID.create() }]);
   } catch (error) {
     console.error('Error while sending message on telegram');
   }
@@ -31,7 +32,7 @@ const freetext = async (chatId: number, text: string, bot, io) => {
   const messages: Message[] = [{ text, sender: Sender.User }, { text: botResponse, sender: Sender.Bot }];
   try {
     await bot.sendMessage(chatId, botResponse);
-    io.emit(email, messages);
+    io.emit(email, [{ ...messages[0], _id: GUID.create() }, { ...messages[1], _id: GUID.create() }]);
   } catch (error) {
     console.error('Error while sending message on telegram');
   }
@@ -54,7 +55,7 @@ const getinfo = async (chatId: number, text: string, bot, io) => {
   const messages: Message[] = [{ text, sender: Sender.User }, { text: botResponse, sender: Sender.Bot }];
   try {
     await bot.sendMessage(chatId, botResponse);
-    io.emit(email, messages);
+    io.emit(email, [{ ...messages[0], _id: GUID.create() }, { ...messages[1], _id: GUID.create() }]);
   } catch (error) {
     console.error('Error while sending message on telegram');
   }
@@ -71,7 +72,7 @@ const end = async (chatId: number, text: string, bot, io) => {
   const { email, startTime } = conversationDetails[chatId];
   try {
     await bot.sendMessage(chatId, botResponse);
-    io.emit(email, messages);
+    io.emit(email, [{ ...messages[0], _id: GUID.create() }, { ...messages[1], _id: GUID.create() }]);
   } catch (error) {
     console.error('Error while sending message on telegram');
   }
@@ -90,7 +91,7 @@ const defualtMessage = async (chatId: number, text: string, bot, io) => {
   const { email } = conversationDetails[chatId];
   try {
     await bot.sendMessage(chatId, botResponse);
-    io.emit(email, messages);
+    io.emit(email, [{ ...messages[0], _id: GUID.create() }, { ...messages[1], _id: GUID.create() }]);
   } catch (error) {
     console.error('Error while sending message on telegram');
   }
