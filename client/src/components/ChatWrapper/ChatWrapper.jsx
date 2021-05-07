@@ -39,7 +39,7 @@ function ChatWrapper() {
         container
         direction="row"
         justify="center"
-        alignItems="strech"
+        alignItems="stretch"
         spacing={0}>
         <Grid
           className={classes.userListWrapper}
